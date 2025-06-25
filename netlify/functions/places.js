@@ -1,22 +1,20 @@
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
 
-exports.handler = async function(event, context) {
+exports.handler = async function (event, context) {
   const { query, lat, lng } = event.queryStringParameters;
+  const apiKey = process.env.GOOGLE_API_KEY;
 
-  if (!query || !lat || !lng) {
+  if (!query || !lat || !lng || !apiKey) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ message: 'Missing required parameters: query, lat, lng' }),
+      body: JSON.stringify({ error: "Missing query, lat, lng, or API key" }),
     };
   }
 
-  const apiKey = process.env.GOOGLE_PLACES_API_KEY; // set this in Netlify environment variables
-  const endpoint = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(
-    query
-  )}&location=${lat},${lng}&radius=2000&key=${apiKey}`;
+  const googleUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=${encodeURIComponent(query)}&location=${lat},${lng}&radius=1500&key=${apiKey}`;
 
   try {
-    const response = await fetch(endpoint);
+    const response = await fetch(googleUrl);
     const data = await response.json();
 
     return {
@@ -26,7 +24,7 @@ exports.handler = async function(event, context) {
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Failed to fetch places', details: error.message }),
+      body: JSON.stringify({ error: "Failed to fetch data", details: error.message }),
     };
   }
 };

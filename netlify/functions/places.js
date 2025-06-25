@@ -1,7 +1,6 @@
-// netlify/functions/places.js
-const fetch = require('node-fetch');
+import { fetch } from 'undici'; // ✅ Use ESM-compatible fetch
 
-exports.handler = async (event) => {
+export async function handler(event) {
   const { query, lat, lng } = event.queryStringParameters;
 
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
@@ -21,4 +20,4 @@ exports.handler = async (event) => {
       body: JSON.stringify({ error: error.message }),
     };
   }
-};
+}

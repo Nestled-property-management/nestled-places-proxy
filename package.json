@@ -6,6 +6,7 @@
     "build": "echo 'No build step required'"
   },
   "dependencies": {
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^2.7.0",
+    "undici": "^7.10.0"
   }
 }

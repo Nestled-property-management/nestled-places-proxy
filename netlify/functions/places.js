@@ -1,6 +1,6 @@
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
-exports.handler = async function (event) {
+export async function handler(event) {
   const { query, lat, lng } = event.queryStringParameters;
 
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
@@ -20,4 +20,4 @@ exports.handler = async function (event) {
       body: JSON.stringify({ error: error.message }),
     };
   }
-};
+}

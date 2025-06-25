@@ -1,6 +1,7 @@
-import fetch from 'node-fetch';
+// netlify/functions/places.js
+const fetch = require('node-fetch');
 
-export async function handler(event) {
+exports.handler = async (event) => {
   const { query, lat, lng } = event.queryStringParameters;
 
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
@@ -20,4 +21,4 @@ export async function handler(event) {
       body: JSON.stringify({ error: error.message }),
     };
   }
-}
+};

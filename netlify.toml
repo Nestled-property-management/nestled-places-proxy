@@ -1,7 +1,5 @@
-[build]
-  functions = "netlify/functions"
-  publish = "public"
-  command = "npm install && npm run build"
+[functions]
+  directory = "netlify/functions"
 
 [[redirects]]
   from = "/api/*"

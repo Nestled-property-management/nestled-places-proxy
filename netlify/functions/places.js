@@ -1,20 +1,13 @@
-const fetch = require("node-fetch");
+const fetch = require('node-fetch');
 
-exports.handler = async function (event, context) {
+exports.handler = async function (event) {
   const { query, lat, lng } = event.queryStringParameters;
-  const apiKey = process.env.GOOGLE_API_KEY;
 
-  if (!query || !lat || !lng || !apiKey) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: "Missing query, lat, lng, or API key" }),
-    };
-  }
-
-  const googleUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=${encodeURIComponent(query)}&location=${lat},${lng}&radius=1500&key=${apiKey}`;
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+  const endpoint = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=1500&keyword=${query}&key=${apiKey}`;
 
   try {
-    const response = await fetch(googleUrl);
+    const response = await fetch(endpoint);
     const data = await response.json();
 
     return {
@@ -24,7 +17,7 @@ exports.handler = async function (event, context) {
   } catch (error) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Failed to fetch data", details: error.message }),
+      body: JSON.stringify({ error: error.message }),
     };
   }
 };

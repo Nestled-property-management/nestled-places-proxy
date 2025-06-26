@@ -2,7 +2,7 @@ export async function handler(event) {
   const { query, lat, lng } = event.queryStringParameters;
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
 
-  const endpoint = `https://places.googleapis.com/v1/places:searchText?key=${apiKey}`;
+  const endpoint = `https://places.googleapis.com/v1/places:searchText?key=${apiKey}`;const endpoint = `https://places.googleapis.com/v1/places:searchNearby?key=${apiKey}`;
 
   const body = {
     textQuery: query,

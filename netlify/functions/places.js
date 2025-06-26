@@ -2,19 +2,21 @@ export async function handler(event) {
   const { query, lat, lng } = event.queryStringParameters;
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
 
-  const endpoint = `https://places.googleapis.com/v1/places:searchText?key=${apiKey}`;const endpoint = `https://places.googleapis.com/v1/places:searchNearby?key=${apiKey}`;
+  const endpoint = `https://places.googleapis.com/v1/places:searchNearby?key=${apiKey}`;
 
   const body = {
-    textQuery: query,
-    locationBias: {
+    includedTypes: [],
+    keyword: query,
+    maxResultCount: 20,
+    locationRestriction: {
       circle: {
         center: {
           latitude: parseFloat(lat),
           longitude: parseFloat(lng),
         },
-        radius: 10000, // in meters
-      },
-    },
+        radius: 10000 // 10km
+      }
+    }
   };
 
   try {
@@ -23,6 +25,8 @@ export async function handler(event) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-Goog-Api-Key': apiKey,
+        'X-Goog-FieldMask': '*'
       },
       body: JSON.stringify(body),
     });

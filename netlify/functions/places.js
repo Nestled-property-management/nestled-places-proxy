@@ -4,22 +4,8 @@ export async function handler(event) {
 
   const endpoint = `https://places.googleapis.com/v1/places:searchNearby?key=${apiKey}`;
 
-  // Map friendly names to valid Places API types
-  const typeMap = {
-    restaurants: "restaurant",
-    bars: "bar",
-    cafes: "cafe",
-    attractions: "tourist_attraction",
-    "things to do with kids": "amusement_park",
-    "taxi services": "taxi_stand",
-    hospital: "hospital",
-    "train stations": "train_station"
-  };
-
-  const googleType = typeMap[query.toLowerCase()] || query;
-
   const body = {
-    includedTypes: [googleType],
+    includedTypes: [query], // e.g., 'restaurant', 'bar', 'hospital'
     maxResultCount: 20,
     locationRestriction: {
       circle: {
@@ -27,19 +13,20 @@ export async function handler(event) {
           latitude: parseFloat(lat),
           longitude: parseFloat(lng),
         },
-        radius: 10000, // 10km
+        radius: 10000, // 10 km
       },
     },
   };
 
   try {
-    const fetch = (await import("node-fetch")).default;
+    const fetch = (await import('node-fetch')).default;
     const response = await fetch(endpoint, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "X-Goog-Api-Key": apiKey,
-        "X-Goog-FieldMask": "*",
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': apiKey,
+        'X-Goog-FieldMask':
+          'places.displayName,places.formattedAddress,places.location,places.types,places.primaryType,places.id,places.nationalPhoneNumber,places.shortFormattedAddress,places.googleMapsUri,places.iconBackgroundColor,places.iconMaskBaseUri,places.photos',
       },
       body: JSON.stringify(body),
     });
@@ -51,7 +38,7 @@ export async function handler(event) {
       body: JSON.stringify(data),
     };
   } catch (error) {
-    console.error("Places API error:", error);
+    console.error('Places API error:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message }),

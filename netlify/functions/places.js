@@ -6,7 +6,7 @@ export async function handler(event) {
 
   const body = {
     includedTypes: [],
-    keyword: query,
+    textQuery: query,
     maxResultCount: 20,
     locationRestriction: {
       circle: {

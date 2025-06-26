@@ -5,8 +5,7 @@ export async function handler(event) {
   const endpoint = `https://places.googleapis.com/v1/places:searchNearby?key=${apiKey}`;
 
   const body = {
-    includedTypes: [],
-    textQuery: query,
+    includedTypes: [query], // e.g., 'restaurant', 'bar', 'hospital'
     maxResultCount: 20,
     locationRestriction: {
       circle: {
@@ -14,7 +13,7 @@ export async function handler(event) {
           latitude: parseFloat(lat),
           longitude: parseFloat(lng),
         },
-        radius: 10000 // 10km
+        radius: 10000 // 10 km
       }
     }
   };
@@ -26,7 +25,7 @@ export async function handler(event) {
       headers: {
         'Content-Type': 'application/json',
         'X-Goog-Api-Key': apiKey,
-        'X-Goog-FieldMask': '*'
+        'X-Goog-FieldMask': '*',
       },
       body: JSON.stringify(body),
     });
